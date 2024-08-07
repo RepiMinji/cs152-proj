@@ -194,24 +194,7 @@ public class RedBlackTree
 			String f = "";
 			for (String word : words) 
 			{
-				RedBlackTree.Node current = this.root;
-				RedBlackTree.Node look = new RedBlackTree.Node(word);
-				while(current != null)
-				{
-					if(look.compareTo(current) < 0)
-					{
-						current = current.leftChild;
-					}
-					else if(look.compareTo(current) > 0)
-					{
-						current = current.rightChild;
-					}
-					else if(current.key.equals(word))
-					{
-						f += current.key + " ";
-						break;
-					}
-				}
+				f += lookup(word).key + " ";
 			}
 			return f;
 		}
@@ -423,6 +406,6 @@ public class RedBlackTree
 			String s = in.nextLine();
 			rbt.insert(s);
 		}
-		System.out.println(rbt.looking("when aaron was young"));
+		System.out.println(rbt.looking("phoenix wright ace attorney"));
 	}
 }
