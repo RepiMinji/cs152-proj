@@ -19,3 +19,4 @@ classes/**
 
 # generated javadoc
 javadoc/**
+/classes/
