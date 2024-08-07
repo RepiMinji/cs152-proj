@@ -192,11 +192,19 @@ public class RedBlackTree
 		{
 			String[] words = k.split(" ");
 			String f = "";
+			String n = "not found: ";
 			for (String word : words) 
 			{
-				f += lookup(word).key + " ";
+				if(lookup(word) == null)
+				{
+					n += word + " ";
+				}
+				else
+				{
+					f += lookup(word).key + " ";
+				}
 			}
-			return f;
+			return f + ", " + n;
 		}
 		else
 		{
@@ -406,6 +414,6 @@ public class RedBlackTree
 			String s = in.nextLine();
 			rbt.insert(s);
 		}
-		System.out.println(rbt.looking("phoenix wright ace attorney"));
+		System.out.println(rbt.looking("a normal sentence with asdf"));
 	}
 }
