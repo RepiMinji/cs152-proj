@@ -16,7 +16,7 @@ import edu.stanford.nlp.pipeline.*;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.util.CoreMap;
-import edu.stanford.nlp.pipeline.StanfordCoreNLP;
+
 import java.util.Properties;
 
 public class RedBlackTree {
@@ -292,24 +292,6 @@ public class RedBlackTree {
 		preOrderVisit(n.rightChild, v);
 	}
 
-	public String looking(String k) {
-		if (k.contains(" ")) {
-			String[] words = k.split(" ");
-			String f = "";
-			String n = "";
-			for (String word : words) {
-				if (lookup(word) == null) {
-					n += word + " ";
-				} else {
-					f += lookup(word).key + " ";
-				}
-			}
-			return f + ", " + "not found: " + n;
-		} else {
-			return lookup(k).key;
-		}
-	}
-
 	public String suggest(String s) {
 		String[] words = s.split(" ");
 		String n = "";
@@ -326,7 +308,7 @@ public class RedBlackTree {
 			return s;
 		}
 		String suggestion = getClosestWord(s);
-		return suggestion != null ? suggestion : s;
+		return suggestion;
 	}
 
 	static int compute_Levenshtein_distance(String str1, String str2) {
@@ -349,8 +331,7 @@ public class RedBlackTree {
 	}
 
 	static int minm_edits(int... nums) {
-		return Arrays.stream(nums).min().orElse(
-				Integer.MAX_VALUE);
+		return Arrays.stream(nums).min().orElse(Integer.MAX_VALUE);
 	}
 
 	private static String getClosestWord(String s) {
@@ -369,7 +350,7 @@ public class RedBlackTree {
 
 	public static void main(String[] args) throws Exception {
 		RedBlackTree rbt = new RedBlackTree();
-		Path path = Paths.get("./src/dictionary.txt");
+		Path path = Paths.get("./src/dictionary3.txt");
 
 		// making rbt
 		Scanner in = new Scanner(path);
@@ -379,7 +360,7 @@ public class RedBlackTree {
 		}
 
 		// making dictionary hashset
-		try (BufferedReader br = new BufferedReader(new FileReader("./src/dictionary.txt"))) {
+		try (BufferedReader br = new BufferedReader(new FileReader("./src/dictionary3.txt"))) {
 			String line;
 			while ((line = br.readLine()) != null) {
 				dictionary.add(line.trim());
@@ -391,7 +372,7 @@ public class RedBlackTree {
 		Properties props = new Properties();
 		props.setProperty("annotators", "tokenize, ssplit");
 		StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
-		String text = rbt.suggest("This is an example of a spelling checkr");
+		String text = rbt.suggest("hlep talk cat jab devour");
 		Annotation document = new Annotation(text);
 		pipeline.annotate(document);
 		for (CoreMap sentence : document.get(CoreAnnotations.SentencesAnnotation.class)) {
@@ -401,8 +382,5 @@ public class RedBlackTree {
 				System.out.println("Original: " + word + " | Corrected: " + correctedWord);
 			}
 		}
-
-		System.out.println(rbt.looking("a normal sentence with asdf"));
-		System.out.println(rbt.suggest("temrinal"));
 	}
 }
