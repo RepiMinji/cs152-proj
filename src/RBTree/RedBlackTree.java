@@ -16,6 +16,7 @@ import edu.stanford.nlp.pipeline.*;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.util.CoreMap;
+import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import java.util.Properties;
 
 public class RedBlackTree {
