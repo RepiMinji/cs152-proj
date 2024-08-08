@@ -11,7 +11,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 compileJava.options.encoding = 'UTF-8'
 
-version = '4.5.8'
+version = '4.5.4'
 
 // Gradle application plugin
 mainClassName = "edu.stanford.nlp.pipeline.StanfordCoreNLP"
@@ -51,6 +51,9 @@ dependencies {
   compile fileTree(dir: 'lib', include: '*.jar')
   testCompile fileTree(dir: 'liblocal', include: '*.jar')
   implementation 'org.apache.commons:commons-text:1.10.0'
+  implementation 'edu.stanford.nlp:stanford-corenlp:4.5.4' 
+  implementation 'edu.stanford.nlp:stanford-corenlp:4.5.4:models' 
+
 }
 
 // Eclipse plugin setup
