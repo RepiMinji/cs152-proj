@@ -2,16 +2,28 @@ package RBTree;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
+
+import edu.stanford.nlp.pipeline.*;
+import edu.stanford.nlp.ling.CoreAnnotations;
+import edu.stanford.nlp.util.CoreMap;
+import org.apache.commons.text.similarity.LevenshteinDistance;
+import java.util.Properties;
 
 public class RedBlackTree
 {
 	private static RedBlackTree.Node root;
 	private static final int RED = 0;
 	private static final int BLACK = 1;
+
+	private static final Set<String> dictionary = new HashSet<>();
 	
 	public static class Node implements Comparable<RedBlackTree.Node>
 	{
@@ -185,34 +197,7 @@ public class RedBlackTree
 		}
 		return null;
 	}
-
-	public String looking(String k)
-	{
-		if(k.contains(" "))
-		{
-			String[] words = k.split(" ");
-			String f = "";
-			String n = "not found: ";
-			for (String word : words) 
-			{
-				if(lookup(word) == null)
-				{
-					n += word + " ";
-				}
-				else
-				{
-					f += lookup(word).key + " ";
-				}
-			}
-			return f + ", " + n;
-		}
-		else
-		{
-			return lookup(k).key;
-		}
-	}
-	
-	
+		
 	public RedBlackTree.Node getSibling(RedBlackTree.Node n)
 	{
 		if(n == this.root)
@@ -402,18 +387,92 @@ public class RedBlackTree
 		preOrderVisit(n.leftChild, v);
 		preOrderVisit(n.rightChild, v);
 	}
+
+	public String looking(String k)
+	{
+		if(k.contains(" "))
+		{
+			String[] words = k.split(" ");
+			String f = "";
+			String n = "";
+			for (String word : words) 
+			{
+				if(lookup(word) == null)
+				{
+					n += word + " ";
+				}
+				else
+				{
+					f += lookup(word).key + " ";
+				}
+			}
+			return f + ", " + "not found: " + n;
+		}
+		else
+		{
+			return lookup(k).key;
+		}
+	}
+
+	public String suggest(String s)
+	{
+		String[] words = s.split(" ");
+		String n = "";
+		String suggestions = "";
+		for(String word: words)
+		{
+			if(lookup(word) == null)
+			{
+				n += word + " ";
+			}
+		}
+		for(String word: n.split(" "))
+		{
+			suggestions += getClosestWord(word) + " ";
+		}
+		return suggestions;
+	}
+
+	private static String getClosestWord(String s)
+	{
+		String closest = null;
+		int minDist = Integer.MAX_VALUE;
+		LevenshteinDistance l = new LevenshteinDistance;
+
+		for(String word: dictionary)
+		{
+			int dist = l.apply(s.toLowerCase(), word);
+			if(dist<minDist)
+			{
+				minDist = dist;
+				closest = word;
+			}
+		}
+		return closest;
+	}
 	
 	public static void main(String []args) throws Exception
 	{
 		RedBlackTree rbt = new RedBlackTree();
-		long start = System.currentTimeMillis();
 		Path path = Paths.get("./src/dictionary.txt");
+		
+		//making rbt
 		Scanner in = new Scanner(path);
 		while(in.hasNextLine())
 		{
 			String s = in.nextLine();
 			rbt.insert(s);
 		}
+
+		//making dictionary hashset
+		try (BufferedReader br = new BufferedReader(new FileReader("./src/dictionary.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                dictionary.add(line.trim());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 		System.out.println(rbt.looking("a normal sentence with asdf"));
 	}
 }
