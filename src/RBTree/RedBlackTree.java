@@ -1,6 +1,6 @@
 package RBTree;
 
-import static org.junit.Assert.assertEquals;
+//import static org.junit.Assert.assertEquals;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -11,13 +11,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
-
-import edu.stanford.nlp.pipeline.*;
-import edu.stanford.nlp.ling.CoreAnnotations;
-import edu.stanford.nlp.ling.CoreLabel;
-import edu.stanford.nlp.util.CoreMap;
-
-import java.util.Properties;
 
 public class RedBlackTree {
 	private static RedBlackTree.Node root;
@@ -369,18 +362,24 @@ public class RedBlackTree {
 			e.printStackTrace();
 		}
 
-		Properties props = new Properties();
-		props.setProperty("annotators", "tokenize, ssplit");
-		StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
-		String text = rbt.suggest("hlep talk cat jab devour");
-		Annotation document = new Annotation(text);
-		pipeline.annotate(document);
-		for (CoreMap sentence : document.get(CoreAnnotations.SentencesAnnotation.class)) {
-			for (CoreLabel token : sentence.get(CoreAnnotations.TokensAnnotation.class)) {
-				String word = token.word();
-				String correctedWord = spellCheck(word);
-				System.out.println("Original: " + word + " | Corrected: " + correctedWord);
-			}
+		//Properties props = new Properties();
+		//props.setProperty("annotators", "tokenize, ssplit");
+		//StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
+		//String text = rbt.suggest("hlep talk cat jab devour");
+		//Annotation document = new Annotation(text);
+		//pipeline.annotate(document);
+		//for (CoreMap sentence : document.get(CoreAnnotations.SentencesAnnotation.class)) {
+		//	for (CoreLabel token : sentence.get(CoreAnnotations.TokensAnnotation.class)) {
+		//		String word = token.word();
+		//		String correctedWord = spellCheck(word);
+		//		System.out.println("Original: " + word + " | Corrected: " + correctedWord);
+		//	}
+
+		//}
+		String[] words = rbt.suggest("hlep talk cat jab devour").split(" ");
+		for(String word: words)
+		{
+			System.out.println("Original: " + word + " | Corrected: " + spellCheck(word));
 		}
 	}
 }
